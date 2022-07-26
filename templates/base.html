@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Logo Icon Here -->
+    <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='') }}"> -->
+
+    {% block head %}
+    <!-- CSS File Here -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='') }}"> -->
+
+    {% endblock %}
+</head>
+
+<body>
+    {% block navbar %}
+    {% include 'includes/_navbar.html' %}
+    {% endblock %}
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% block scripts %}
+    <!-- JS File Here -->
+    <!-- <script src="{{ url_for('static',filename='') }}"></script> -->
+
+    {% endblock %}
+</body>
+{% block footer %}
+{% include 'includes/_footer.html' %}
+{% endblock %}
+
+</html>
+Footer
+© 2022 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
