@@ -2,31 +2,42 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>{% block title %}{% endblock %}</title>
     <!-- Logo Icon Here -->
-    <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='') }}"> -->
+    <link rel="apple-touch-icon" href="{{ url_for('static',filename='images/apple-touch-icon.png') }}" />
+    <link rel="apple-touch-startup-image"
+        href="{{ url_for('static',filename='images/apple-touch-startup-image-640x920.png') }}">
 
-    {% block head %}
     <!-- CSS File Here -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='') }}"> -->
-
-    {% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/framework7.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/swipebox.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/animations.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/reset.css') }}" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,900" rel="stylesheet">
 </head>
 
-<body>
+<body id="mobile_wrap">
     {% block navbar %}
     {% include 'includes/_navbar.html' %}
     {% endblock %}
-    <div>
-        {% block content %}
-        {% endblock %}
-    </div>
+    {% block content %}
+    {% endblock %}
 
     {% block scripts %}
     <!-- JS File Here -->
-    <!-- <script src="{{ url_for('static',filename='') }}"></script> -->
-
+    <script src="{{ url_for('static',filename='js/jquery-1.10.1.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/jquery.validate.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/framework7.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/jquery.swipebox.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/jquery.fitvids.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/email.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/audio.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/my-app.js') }}"></script>
     {% endblock %}
 </body>
 {% block footer %}
@@ -34,9 +45,3 @@
 {% endblock %}
 
 </html>
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security

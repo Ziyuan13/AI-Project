@@ -1,0 +1,82 @@
+<div class="statusbar-overlay"></div>
+
+<div class="panel-overlay"></div>
+
+<div class="panel panel-left panel-reveal">
+    <div class="view view-subnav">
+        <div class="pages">
+            <div data-page="panel-leftmenu" class="page pagepanel">
+                <div class="page-content">
+                    <nav class="main_nav_underline">
+                        <ul>
+                            <li><a href="index.html" class="close-panel" data-view=".view-main"><img
+                                        src="{{ url_for('static',filename='images/icons/white/home.png') }}" alt=""
+                                        title="" /><span>Home</span></a></li>
+                            <li><a href="about.html" class="close-panel" data-view=".view-main"><img
+                                        src="{{ url_for('static',filename='images/icons/white/mobile.png') }}" alt=""
+                                        title="" /><span>About</span></a></li>
+                            <li><a href="#" data-popup=".popup-login" class="open-popup close-panel"><img
+                                        src="{{ url_for('static',filename='images/icons/white/lock.png') }}" alt=""
+                                        title="" /><span>Login</span></a></li>
+                            <li><a href="blog.html" class="close-panel" data-view=".view-main"><img
+                                        src="{{ url_for('static',filename='images/icons/white/blog.png') }}" alt=""
+                                        title="" /><span>Blog</span></a></li>
+                            <li><a href="photos.html" class="close-panel" data-view=".view-main"><img
+                                        src="{{ url_for('static',filename='images/icons/white/photos.png') }}" alt=""
+                                        title="" /><span>Photos</span></a></li>
+                            <li><a href="videos.html" class="close-panel" data-view=".view-main"><img
+                                        src="{{ url_for('static',filename='images/icons/white/video.png') }}" alt=""
+                                        title="" /><span>Videos</span></a></li>
+                            <li><a href="chat.html" class="close-panel" data-view=".view-main"><img
+                                        src="{{ url_for('static',filename='images/icons/white/message.png') }}" alt=""
+                                        title="" /><span>Chat messages</span></a></li>
+                            <li><a href="form.html" class="close-panel" data-view=".view-main"><img
+                                        src="{{ url_for('static',filename='images/icons/white/form.png') }}" alt=""
+                                        title="" /><span>Custom Form</span></a></li>
+                            <li><a href="tel:012345678" class="close-panel external" data-view=".view-main"><img
+                                        src="{{ url_for('static',filename='images/icons/white/phone.png') }}" alt=""
+                                        title="" /><span>Call now!</span></a></li>
+                            <li><a href="contact.html" class="close-panel" data-view=".view-main"><img
+                                        src="{{ url_for('static',filename='images/icons/white/contact.png') }}" alt=""
+                                        title="" /><span>Contact</span></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-right panel-reveal">
+    <div class="user_login_info">
+
+        <div class="user_thumb">
+            <img src="{{ url_for('static',filename='images/page_photo.jpg') }}" alt="" title="" />
+            <div class="user_details">
+                <p>Welcome, <span>Nathalie</span></p>
+            </div>
+            <div class="user_avatar"><img src="{{ url_for('static',filename='images/avatar.jpg') }}" alt="" title="" />
+            </div>
+        </div>
+
+        <nav class="user-nav">
+            <ul>
+                <li><a href="features.html" class="close-panel"><img
+                            src="{{ url_for('static',filename='images/icons/white/settings.png') }}" alt=""
+                            title="" /><span>Account Settings</span></a></li>
+                <li><a href="features.html" class="close-panel"><img
+                            src="{{ url_for('static',filename='images/icons/white/briefcase.png') }}" alt=""
+                            title="" /><span>My Account</span></a></li>
+                <li><a href="features.html" class="close-panel"><img
+                            src="{{ url_for('static',filename='images/icons/white/message.png') }}" alt=""
+                            title="" /><span>Messages</span><strong>12</strong></a></li>
+                <li><a href="features.html" class="close-panel"><img
+                            src="{{ url_for('static',filename='images/icons/white/love.png') }}" alt=""
+                            title="" /><span>Favorites</span><strong>5</strong></a></li>
+                <li><a href="index.html" class="close-panel"><img
+                            src="{{ url_for('static',filename='images/icons/white/lock.png') }}" alt=""
+                            title="" /><span>Logout</span></a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
