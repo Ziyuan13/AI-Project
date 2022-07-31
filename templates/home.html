@@ -73,7 +73,14 @@
                 <div class="toolbar-icon">
                   <a href="about.html" data-view=".view-main"><img src="{{ url_for('static',filename='images/icons/blue/users.png') }}" alt=""
                       title="" /><span>LEADERBOARD</span></a>
-                  <a href="features.html" data-view=".view-main"><img src="{{ url_for('static',filename='images/icons/blue/features.png') }}" alt=""
+                  <a href="{{url_for('logout')}}"><img src="{{ url_for('static',filename='images/icons/blue/lock.png') }}" alt=""
+                      title="" /><span>LOGOUT</span></a>
+                  <a href="blog.html" data-view=".view-main"><img src="{{ url_for('static',filename='images/icons/blue/blog.png') }}" alt=""
+                      title="" /><span>FORUM</span></a>
+                  <a href="photos.html" data-view=".view-main"><img src="{{ url_for('static',filename='images/icons/blue/photos.png') }}" alt=""
+                      title="" /><span>PHOTOS</span></a>
+                  <a href="contact.html" data-view=".view-main"><img src="{{ url_for('static',filename='images/icons/blue/contact.png') }}" alt=""
+                      title="" /><span>CONTACT</span></a>
                       title="" /><span>SCAN</span></a>
                   <a href="/blog" data-view=".view-main"><img src="{{ url_for('static',filename='images/icons/blue/blog.png') }}" alt=""
                       title="" /><span>FORUM</span></a>
