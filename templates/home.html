@@ -164,8 +164,7 @@
   <div class="popup popup-infographic">
     <div class="content-block">
       <h4>INFOGRAPHIC ON E-WASTE</h4>
-      <img style="display: block; margin-left: auto; margin-right: auto" src="{{ url_for('static',filename='images/infographic1.png') }}" alt="image">
-      <img style="display: block; margin-left: auto; margin-right: auto" src="{{ url_for('static',filename='images/infographic2.png') }}" alt="image">
+      <img width="80%" style="display: block; margin-left: auto; margin-right: auto" src="{{ url_for('static',filename='images/infographic.jpg') }}" alt="image">
     </div>
     <div class="close_popup_button">
       <a href="#" class="close-popup"><img src="{{ url_for('static',filename='images/icons/black/menu_close.png') }}"
@@ -177,12 +176,9 @@
   <div class="popup popup-video">
     <div class="content-block">
       <h4>VIDEO ON E-WASTE</h4>
-      <iframe width="100%" height="280" src="https://www.youtube.com/embed/qu8tAALNu8w" title="YouTube video player"
-        frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-      <iframe width="100%" height="280" src="https://www.youtube.com/embed/lplCDdDFUjI" title="YouTube video player"
-        frameborder="0"></iframe>
-      <iframe width="100%" height="280" src="https://www.youtube.com/embed/rx8NvE2bvkU" title="YouTube video player"
-        frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+      <video width="100%" controls>
+        <source src="{{ url_for('static',filename='video/ewaste_video.mp4') }}" type="video/mp4" />
+      </video>
     </div>
     <div class="close_popup_button">
       <a href="#" class="close-popup"><img src="{{ url_for('static',filename='images/icons/black/menu_close.png') }}"
