@@ -31,7 +31,7 @@
 			<li><a href="about.html" class="close-panel" data-view=".view-main"><img src="images/icons/white/mobile.png" alt="" title="" /><span>About</span></a></li>
 			<li><a href="features.html" class="close-panel" data-view=".view-main"><img src="images/icons/white/features.png" alt="" title="" /><span>Features</span></a></li>
 			
-			<li><a href="#" data-popup=".popup-login" class="open-popup close-panel"><img src="images/icons/white/lock.png" alt="" title="" /><span>Login</span></a></li>
+			<!--<li><a href="{{url_for('logout')}}" class="close-panel"><img src="images/icons/white/lock.png" alt="" title="" /><span>Logout</span></a></li>-->
 			<li><a href="team.html" class="close-panel" data-view=".view-main"><img src="images/icons/white/users.png" alt="" title="" /><span>Team</span></a></li>
 			<li><a href="blog.html" class="close-panel" data-view=".view-main"><img src="images/icons/white/blog.png" alt="" title="" /><span>Blog</span></a></li>		
 
@@ -75,7 +75,9 @@
                       <li><a href="features.html" class="close-panel"><img src="images/icons/white/briefcase.png" alt="" title="" /><span>My Account</span></a></li>
                       <li><a href="features.html" class="close-panel"><img src="images/icons/white/message.png" alt="" title="" /><span>Messages</span><strong>12</strong></a></li>
                       <li><a href="features.html" class="close-panel"><img src="images/icons/white/love.png" alt="" title="" /><span>Favorites</span><strong>5</strong></a></li>
-                      <li><a href="index.html" class="close-panel"><img src="images/icons/white/lock.png" alt="" title="" /><span>Logout</span></a></li>
+                      
+                      <li><a href="{{url_for('logout')}}"><img src="images/icons/white/lock.png" alt="" title="" />Logout</a></li>
+                    
                     </ul>
                   </nav>
       </div>
