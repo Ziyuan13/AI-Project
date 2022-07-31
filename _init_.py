@@ -8,7 +8,7 @@ import reddit
 
 app = Flask(__name__)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-# cnn = tf.keras.models.load_model('.h5')
+cnn = tf.keras.models.load_model('waste_classifier.h5')
 
 @app.route('/')
 def home():
