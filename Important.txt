@@ -1,5 +1,8 @@
 Steps to install Flask
 python -m pip install flask
+pip install flask-login
+pip install -U Flask-WTF
+pip install flask-bcrypt
 
 Steps to install Tensorflow Libraries
 pip install pandas
@@ -16,4 +19,5 @@ pip install praw
 
 
 Database
-https://pythonbasics.org/flask-sqlalchemy/
+pip install flask-sqlalchemy
+
