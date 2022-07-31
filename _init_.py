@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import os
 import reddit
 
-# import tensorflow as tf
-# import cv2
-# import numpy as np
+import tensorflow as tf
+import cv2
+import numpy as np
 
 app = Flask(__name__)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -13,17 +13,6 @@ cnn = tf.keras.models.load_model('waste_classifier.h5')
 @app.route('/')
 def home():
     return render_template('home.html')
-
-
-@app.route('/videos')
-def video():
-    return render_template('videos.html')
-
-
-@app.route('/photos')
-def photos():
-    return render_template('photos.html')
-
 
 @app.route('/blogs')
 def blogs():

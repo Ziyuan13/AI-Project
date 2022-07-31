@@ -2,16 +2,18 @@ Steps to install Flask
 python -m pip install flask
 
 Steps to install Tensorflow Libraries
-pip install numpy
 pip install pandas
 pip install matplotlib
 pip install scipy
 pip install -U scikit-learn
 pip install keras
 pip install tensorflow
+pip install tensorflow-gpu
 pip install opencv-python
+
 Steps to install praw
 pip install praw
+
 
 Database
 https://pythonbasics.org/flask-sqlalchemy/
