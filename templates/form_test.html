@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Alba Step Up{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    margin: 0px;
+    height: 100vh;
+    background: #1283da;
+  }
+
+  .center {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+  .form-input {
+    width: 350px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: -3px -3px 7px rgba(94, 104, 121, 0.377),
+      3px 3px 7px rgba(94, 104, 121, 0.377);
+  }
+
+  .form-input input {
+    display: none;
+
+  }
+
+  .form-input label {
+    display: block;
+    width: 45%;
+    height: 45px;
+    margin-left: 25%;
+    line-height: 50px;
+    text-align: center;
+    background: #1172c2;
+
+    color: #fff;
+    font-size: 15px;
+    font-family: "Open Sans", sans-serif;
+    text-transform: Uppercase;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  #custom{
+    display: block;
+    width: 45%;
+    height: 45px;
+    margin-left: 25%;
+    line-height: 50px;
+    text-align: center;
+
+    font-size: 15px;
+    font-family: "Open Sans", sans-serif;
+    text-transform: Uppercase;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .form-input img {
+    width: 100%;
+    display: none;
+
+    margin-bottom: 30px;
+  }
+</style>
+<div class="pages">
+  <div data-page="form" class="page no-toolbar no-navbar">
+    <div class="page-content">
+
+      <div class="navbarpages navbarpagesbg">
+        <div class="navbar_left">
+          <div class="logo_text"><a href="index.html">ALBA</a></div>
+        </div>
+        <div class="navbar_right navbar_right_menu">
+          <a href="#" data-panel="left" class="open-panel"><img
+              src="{{ url_for('static',filename='images/icons/white/menu.png') }}" alt="" title="" /></a>
+        </div>
+        <div class="navbar_right">
+          <a href="#" data-panel="right" class="open-panel"><img
+              src="{{ url_for('static',filename='images/icons/white/user.png') }}" alt="" title="" /></a>
+        </div>
+      </div>
+      
+      <div class="center">
+        <div class="form-input">
+          <form method="POST" action="predictImage" , enctype="multipart/form-data">
+            <div class="preview">
+              <img id="file-ip-1-preview">
+            </div>
+            <label for="file-ip-1">Upload Image</label>
+            <input type="file" name="imagefile" id="file-ip-1" onchange="showPreview(event);"/>
+            <br>
+            <label for="file-ip-2">Submit</label>
+            <input type="submit" id="file-ip-2">
+          </form>
+          <br>
+          {% if prediction %}
+          <div>
+            <h2 id="custom">Image is a {{prediction}}</h2>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function showPreview(event) {
+    if (event.target.files.length > 0) {
+      var src = URL.createObjectURL(event.target.files[0]);
+      var preview = document.getElementById("file-ip-1-preview");
+      preview.src = src;
+      preview.style.display = "block";
+    }
+  }
+</script>
+{% endblock %}

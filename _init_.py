@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from flask import Flask, render_template, request, redirect, session, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
@@ -5,13 +6,18 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
+from werkzeug.utils import secure_filename
+import urllib.request
 import os
 import reddit
 
 import tensorflow as tf
 import cv2
+from PIL import Image, ImageOps
 import numpy as np
 from tensorflow.keras import applications
+
+
 
 app = Flask(__name__)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -117,28 +123,44 @@ def blog():
     return render_template('blog.html', posts=my_ten_hot_list, subreddit='ALBA E-Waste')
 
 
-wc = tf.keras.models.load_model('waste_classifier.h5')
+ALLOWED_EXTENSIONS = set({'png', 'jpg', 'jpeg', 'gif', 'bmp'})
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/predictImage', methods=['GET'])
+def getImage():
+    return render_template('form_test.html')
+
 @app.route('/predictImage', methods=['POST'])
 def predictImage():
-    filestream = request.files['file'].read()
-    imgbytes = np.fromstring(filestream, np.uint8)
-    img = cv2.imdecode(imgbytes, cv2.IMREAD_COLOR)
+    imagefile = request.files['imagefile']
+    image_path = "./prediction/" + imagefile.filename
+    imagefile.save(image_path)
+    print(image_path)
 
-    img = cv2.resize(img, (224, 224))
-    img = tf.keras.applications.wc.preprocess_input(img)
-    img = img.reshape(1, 224, 224, 3)
+    np.set_printoptions(suppress=True)
+    model = tf.keras.models.load_model('waste_classifier.h5')
+    data = np.ndarray(shape=(1, 128, 128, 3), dtype=np.float32)
 
-    predictions = wc.predict(img)
-    result = tf.keras.applications.wc.decode_predictions(predictions, top=3)
-
-    return jsonify({
-        "result": [
-            {"name": result[0][0][1], "score": float(result[0][0][2])},
-            {"name": result[0][1][1], "score": float(result[0][1][2])},
-            {"name": result[0][2][1], "score": float(result[0][2][2])},
-        ]
-    })
-
+    image_filename = image_path
+    image = Image.open(image_filename)
+    size = (128, 128)
+    image = ImageOps.fit(image, size, Image.ANTIALIAS)
+    image_array = np.asarray(image)
+    
+    normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
+    data[0] = normalized_image_array
+    prediction = model.predict(data)
+    classification = ["batteries", "clothes", "e-waste", "glass", "light bulbs", "metal", "organic", "paper", "plastic"]
+    i = 0
+    for pos in prediction[0]:
+        if max(prediction[0]) == pos:
+            classified = classification[i]
+            break
+        else:
+            i += 1
+    return render_template('form_test.html', prediction=classified)
 
 
 if __name__ == '__main__':
