@@ -1,13 +1,10 @@
-from django.shortcuts import render
-from flask import Flask, render_template, request, redirect, session, url_for, send_from_directory
+from flask import Flask, jsonify, render_template, request, redirect, session, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
-from werkzeug.utils import secure_filename
-import urllib.request
 import os
 import reddit
 
@@ -122,6 +119,7 @@ def blog():
     return render_template('blog.html', posts=my_ten_hot_list, subreddit='ALBA E-Waste')
 
 
+model = tf.keras.models.load_model('waste_classifier.h5')
 @app.route('/predictImage', methods=['GET','POST'])
 def predictImage():
     if request.method == 'POST':
@@ -131,7 +129,6 @@ def predictImage():
         print(image_path)
 
         np.set_printoptions(suppress=True)
-        model = tf.keras.models.load_model('waste_classifier.h5')
         data = np.ndarray(shape=(1, 128, 128, 3), dtype=np.float32)
 
         image_filename = image_path
@@ -143,18 +140,39 @@ def predictImage():
         normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
         data[0] = normalized_image_array
         prediction = model.predict(data)
-        classification = ["batteries", "clothes", "e-waste", "glass", "light bulbs", "metal", "organic", "paper", "plastic"]
+        target = ["batteries", "clothes", "e-waste", "glass", "light bulbs", "metal", "organic", "paper", "plastic"]
         i = 0
         for pos in prediction[0]:
             if max(prediction[0]) == pos:
-                classified = classification[i]
+                result = target[i]
                 break
             else:
                 i += 1
-        return render_template('prediction.html', prediction=classified)
+        return render_template('prediction.html', prediction=result)
     else:
         return render_template('prediction.html')
 
+# @app.route('/predictImage', methods=['POST'])
+# def predictImage():
+#     # Load image from file
+#     filestream = request.files['file'].read()
+#     imgbytes = np.fromstring(filestream, np.unit8)
+#     img = cv2.imdecode(imgbytes, cv2.IMREAD_COLOR)
+
+#     # Preprocess the image
+#     img = cv2.resize(img, (128, 128))
+#     img = tf.keras.applications.vgg16.preprocess_input(img)
+#     img = img.reshape(1, 128, 128, 3)
+
+#     # Predict and return result
+#     prediction = model.predict(img)
+#     result = tf.keras.applications.vgg16.decode_predictions(prediction, top=3)
+        
+#     return jsonify({"result": [
+#         {"name": result[0][0][1], "score" : float(result[0][0][2])},
+#         {"name": result[0][1][1], "score": float(result[0][1][2])},
+#         {"name": result[0][2][1], "score" : float(result[0][2][2])}
+#     ]})
 
 if __name__ == '__main__':
-    app.run(port="5002", debug=True)
+    app.run(port="5002", debug=False)
