@@ -122,44 +122,38 @@ def blog():
     return render_template('blog.html', posts=my_ten_hot_list, subreddit='ALBA E-Waste')
 
 
-ALLOWED_EXTENSIONS = set({'png', 'jpg', 'jpeg', 'gif', 'bmp'})
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-@app.route('/predictImage', methods=['GET'])
-def getImage():
-    return render_template('prediction.html')
-
-@app.route('/predictImage', methods=['POST'])
+@app.route('/predictImage', methods=['GET','POST'])
 def predictImage():
-    imagefile = request.files['imagefile']
-    image_path = "./prediction/" + imagefile.filename
-    imagefile.save(image_path)
-    print(image_path)
+    if request.method == 'POST':
+        imagefile = request.files['imagefile']
+        image_path = "./prediction/" + imagefile.filename
+        imagefile.save(image_path)
+        print(image_path)
 
-    np.set_printoptions(suppress=True)
-    model = tf.keras.models.load_model('waste_classifier.h5')
-    data = np.ndarray(shape=(1, 128, 128, 3), dtype=np.float32)
+        np.set_printoptions(suppress=True)
+        model = tf.keras.models.load_model('waste_classifier.h5')
+        data = np.ndarray(shape=(1, 128, 128, 3), dtype=np.float32)
 
-    image_filename = image_path
-    image = Image.open(image_filename)
-    size = (128, 128)
-    image = ImageOps.fit(image, size, Image.ANTIALIAS)
-    image_array = np.asarray(image)
-    
-    normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
-    data[0] = normalized_image_array
-    prediction = model.predict(data)
-    classification = ["batteries", "clothes", "e-waste", "glass", "light bulbs", "metal", "organic", "paper", "plastic"]
-    i = 0
-    for pos in prediction[0]:
-        if max(prediction[0]) == pos:
-            classified = classification[i]
-            break
-        else:
-            i += 1
-    return render_template('prediction.html', prediction=classified)
+        image_filename = image_path
+        image = Image.open(image_filename)
+        size = (128, 128)
+        image = ImageOps.fit(image, size, Image.ANTIALIAS)
+        image_array = np.asarray(image)
+        
+        normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
+        data[0] = normalized_image_array
+        prediction = model.predict(data)
+        classification = ["batteries", "clothes", "e-waste", "glass", "light bulbs", "metal", "organic", "paper", "plastic"]
+        i = 0
+        for pos in prediction[0]:
+            if max(prediction[0]) == pos:
+                classified = classification[i]
+                break
+            else:
+                i += 1
+        return render_template('prediction.html', prediction=classified)
+    else:
+        return render_template('prediction.html')
 
 
 if __name__ == '__main__':
