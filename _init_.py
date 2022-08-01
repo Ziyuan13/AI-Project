@@ -15,7 +15,6 @@ import tensorflow as tf
 import cv2
 from PIL import Image, ImageOps
 import numpy as np
-from tensorflow.keras import applications
 
 
 
