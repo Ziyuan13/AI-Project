@@ -129,7 +129,7 @@ def allowed_file(filename):
 
 @app.route('/predictImage', methods=['GET'])
 def getImage():
-    return render_template('form_test.html')
+    return render_template('prediction.html')
 
 @app.route('/predictImage', methods=['POST'])
 def predictImage():
@@ -159,7 +159,7 @@ def predictImage():
             break
         else:
             i += 1
-    return render_template('form_test.html', prediction=classified)
+    return render_template('prediction.html', prediction=classified)
 
 
 if __name__ == '__main__':
