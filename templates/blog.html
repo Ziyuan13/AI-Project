@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Alba Step Up{% endblock %}
+
+{% block content %}
+
+<div class="views">
+
+    <div class="view view-main">
+
+        <div class="pages">
+
+            <div data-page="index" class="page homepage">
+                <div class="page-content">
+
+                    <div class="navbarpages navbarpagesbg">
+                        <div class="navbar_left">
+                            <div class="logo_text"><a href="index.html">ALBA</a></div>
+                        </div>
+                        <div class="navbar_right navbar_right_menu">
+                            <a href="#" data-panel="left" class="open-panel"><img
+                                    src="{{ url_for('static',filename='images/icons/white/menu.png') }}" alt="" title="" /></a>
+                        </div>
+                        <div class="navbar_right">
+                            <a href="#" data-panel="right" class="open-panel"><img
+                                    src="{{ url_for('static',filename='images/icons/white/user.png') }}" alt="" title="" /></a>
+                        </div>
+                    </div>
+
+                    <!-- Slider -->
+                    <div class="swiper-container slidertoolbar swiper-init" data-effect="slide" data-parallax="true"
+                        data-pagination=".swiper-pagination" data-next-button=".swiper-button-next"
+                        data-prev-button=".swiper-button-prev">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" style="background-image:url(../static/images/subreddit_b.png);">
+                                <div class="slider_trans">
+                                    <div class="slider-caption">
+                                        <p data-swiper-parallax="-30%" style="font-size: 130%; color: white; height: 85px;">
+                                            The official subreddit for ALBA E-Waste.
+                                            <br>
+                                            <br>
+                                            A community dedicated to sharing tips, recycling progress and learn more about e-waste!
+                                            <br>
+                                            Join us and kickstart your journey!
+                                            <br>
+                                            <br>
+                                            <u>
+                                                <a style="color: white;" href="https://www.reddit.com/r/ALBA_Ewaste/">Visit Our Official
+                                                    Subreddit Now!</a>
+                                            </u>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="swiper-container-toolbar">
+                        <div>
+                            <div class="toolbar-icon">
+                                {% if posts %}
+                                {% for post in posts %}
+                                <a href="/" style="pointer-events: none;" data-view=".view-main"><img src="{{ url_for('static',filename='images/alba_round_logo.png') }}"
+                                        alt="" title="" />
+                                        <div style="height: 60px;">
+                                            <span style="font-size: 80%;">{{post.title}}</span>
+                                        </div>
+                                </a>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -438,8 +438,8 @@ top: 0;
 height: 100%;
 -webkit-transform: translate3d(0, 0, 0);
 transform: translate3d(0, 0, 0);
--webkit-transition-duration: 400ms;
-transition-duration: 400ms;
+-webkit-transition-duration: 100ms;
+transition-duration: 100ms;
 color:#222222;
 }
 .panel-left, .pagepanel{
@@ -917,7 +917,7 @@ display:inline;
 .slider-caption p{
 color:#ffffff;
 font-size:18px;
-line-height:22px;
+line-height:30px;
 }
 .swiper-container > .swiper-pagination {
 bottom: 5%;

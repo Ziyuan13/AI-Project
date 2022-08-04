@@ -1,6 +1,7 @@
 from mimetypes import init
 import pathlib
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, abort, g 
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, abort, g, jsonify 
+#from flask import Flask, jsonify, render_template, request, redirect, session, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -16,8 +17,9 @@ from google.oauth2 import id_token
 import os
 import reddit
 import requests
-#import tensorflow as tf
+import tensorflow as tf
 import cv2
+from PIL import Image, ImageOps
 import numpy as np
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -161,6 +163,7 @@ def register():
 
     #return render_template('register.html', form=form)
 
+    return render_template('register.html', form=form)
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -178,7 +181,7 @@ def logout():
 
 @app.route('/')
 def home():
-    return render_template('register.html')
+    return render_template('login.html')
 
 @app.route('/home')
 def home3():
@@ -202,39 +205,67 @@ def before_request():
         g.user = session['user']
 
 
-@app.route('/videos')
-def video():
-    return render_template('videos.html')
-@app.route('/blogs')
-def blogs():
+@app.route('/blog')
+def blog():
     my_reddit_instance = reddit.create_reddit_instance()
     my_ten_hot_list = reddit.ten_top_titles(my_reddit_instance, 'ALBA_Ewaste')
-    return render_template('blogs.html', posts=my_ten_hot_list, subreddit='ALBA_Ewaste')
-
-# @app.route('/classify_waste',methods=['POST'])
-# def classifywaste():
-#     filestream = request.files["file"].read()
-#     imgbytes = np.fromstring(filestream,np.uint8)
-#     img = cv2.imdecode(imgbytes,cv2.IMREAD_COLOR)
-
-#     img = cv2.resize(img, (224, 224))
-#     img = tf.keras.applications.cnn.preprocess_input(img)
-#     img = img.reshape(1, 224, 224, 3)
-
-#     predictions = cnn.predict(img)
-#     result = tf.keras.applications.cnn.decode_predictions(predictions, top=3)
-
-#     return jsonify({
-#         "result":[
-#             {"name":result[0][0][1], "score": float(result[0][0][2])},
-#             {"name": result[0][1][1], "score": float(result[0][1][2])},
-#             {"name": result[0][2][1], "score": float(result[0][2][2])},
-#         ]
-#     })
+    return render_template('blog.html', posts=my_ten_hot_list, subreddit='ALBA E-Waste')
 
 
+model = tf.keras.models.load_model('waste_classifier.h5')
+@app.route('/predictImage', methods=['GET','POST'])
+def predictImage():
+    if request.method == 'POST':
+        imagefile = request.files['imagefile']
+        image_path = "./prediction/" + imagefile.filename
+        imagefile.save(image_path)
+        print(image_path)
 
+        np.set_printoptions(suppress=True)
+        data = np.ndarray(shape=(1, 128, 128, 3), dtype=np.float32)
 
+        image_filename = image_path
+        image = Image.open(image_filename)
+        size = (128, 128)
+        image = ImageOps.fit(image, size, Image.ANTIALIAS)
+        image_array = np.asarray(image)
+        
+        normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
+        data[0] = normalized_image_array
+        prediction = model.predict(data)
+        target = ["batteries", "clothes", "e-waste", "glass", "light bulbs", "metal", "organic", "paper", "plastic"]
+        i = 0
+        for pos in prediction[0]:
+            if max(prediction[0]) == pos:
+                result = target[i]
+                break
+            else:
+                i += 1
+        return render_template('prediction.html', prediction=result)
+    else:
+        return render_template('prediction.html')
+
+# @app.route('/predictImage', methods=['POST'])
+# def predictImage():
+#     # Load image from file
+#     filestream = request.files['file'].read()
+#     imgbytes = np.fromstring(filestream, np.unit8)
+#     img = cv2.imdecode(imgbytes, cv2.IMREAD_COLOR)
+
+#     # Preprocess the image
+#     img = cv2.resize(img, (128, 128))
+#     img = tf.keras.applications.vgg16.preprocess_input(img)
+#     img = img.reshape(1, 128, 128, 3)
+
+#     # Predict and return result
+#     prediction = model.predict(img)
+#     result = tf.keras.applications.vgg16.decode_predictions(prediction, top=3)
+        
+#     return jsonify({"result": [
+#         {"name": result[0][0][1], "score" : float(result[0][0][2])},
+#         {"name": result[0][1][1], "score": float(result[0][1][2])},
+#         {"name": result[0][2][1], "score" : float(result[0][2][2])}
+#     ]})
 
 if __name__ == '__main__':
-    app.run(port="5002", debug=True)
+    app.run(port="5002", debug=False)

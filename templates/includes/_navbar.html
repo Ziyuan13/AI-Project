@@ -9,36 +9,22 @@
                 <div class="page-content">
                     <nav class="main_nav_underline">
                         <ul>
-                            <li><a href="index.html" class="close-panel" data-view=".view-main"><img
+                            <li><a href="/home" class="close-panel" data-view=".view-main"><img
                                         src="{{ url_for('static',filename='images/icons/white/home.png') }}" alt=""
                                         title="" /><span>Home</span></a></li>
-                            <li><a href="about.html" class="close-panel" data-view=".view-main"><img
-                                        src="{{ url_for('static',filename='images/icons/white/mobile.png') }}" alt=""
-                                        title="" /><span>About</span></a></li>
-                            <li><a href="#" data-popup=".popup-login" class="open-popup close-panel"><img
-                                        src="{{ url_for('static',filename='images/icons/white/lock.png') }}" alt=""
-                                        title="" /><span>Login</span></a></li>
-                            <li><a href="blog.html" class="close-panel" data-view=".view-main"><img
-                                        src="{{ url_for('static',filename='images/icons/white/blog.png') }}" alt=""
-                                        title="" /><span>Blog</span></a></li>
-                            <li><a href="photos.html" class="close-panel" data-view=".view-main"><img
-                                        src="{{ url_for('static',filename='images/icons/white/photos.png') }}" alt=""
-                                        title="" /><span>Photos</span></a></li>
-                            <li><a href="videos.html" class="close-panel" data-view=".view-main"><img
-                                        src="{{ url_for('static',filename='images/icons/white/video.png') }}" alt=""
-                                        title="" /><span>Videos</span></a></li>
-                            <li><a href="chat.html" class="close-panel" data-view=".view-main"><img
-                                        src="{{ url_for('static',filename='images/icons/white/message.png') }}" alt=""
-                                        title="" /><span>Chat messages</span></a></li>
-                            <li><a href="form.html" class="close-panel" data-view=".view-main"><img
-                                        src="{{ url_for('static',filename='images/icons/white/form.png') }}" alt=""
-                                        title="" /><span>Custom Form</span></a></li>
-                            <li><a href="tel:012345678" class="close-panel external" data-view=".view-main"><img
-                                        src="{{ url_for('static',filename='images/icons/white/phone.png') }}" alt=""
-                                        title="" /><span>Call now!</span></a></li>
-                            <li><a href="contact.html" class="close-panel" data-view=".view-main"><img
-                                        src="{{ url_for('static',filename='images/icons/white/contact.png') }}" alt=""
-                                        title="" /><span>Contact</span></a></li>
+                            <li><a href="about.html" data-view=".view-main"><img src="{{ url_for('static',filename='images/icons/white/users.png') }}"
+                                    alt="" title="" /><span>LEADERBOARD</span></a>
+                            <li><a href="/predictImage" data-view=".view-main"><img
+                                    src="{{ url_for('static',filename='images/icons/white/features.png') }}" alt="" title="" /><span>SCAN</span></a>
+                            <li><a href="/blog" data-view=".view-main"><img src="{{ url_for('static',filename='images/icons/white/blog.png') }}" alt=""
+                                    title="" /><span>FORUM</span></a></li>
+                            <li><a href="#" data-popup=".popup-infographic" class="open-popup"><img
+                                    src="{{ url_for('static',filename='images/icons/white/photos.png') }}" alt=""
+                                    title="" /><span>INFOGRAPHIC</span></a></li>
+                            <li><a href="#" data-popup=".popup-video" class="open-popup"><img
+                                    src="{{ url_for('static',filename='images/icons/white/video.png') }}" alt="" title="" /><span>VIDEOS</span></a></li>
+                            <li><a href="/logout"><img src="{{ url_for('static',filename='images/icons/white/lock.png') }}" alt=""
+                                        title="" /><span>LOGOUT</span></a></li>
                         </ul>
                     </nav>
                 </div>
