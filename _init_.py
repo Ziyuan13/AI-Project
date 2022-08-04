@@ -1,24 +1,53 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from mimetypes import init
+import pathlib
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, abort, g 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
+from google_auth_oauthlib.flow import Flow
+from authlib.integrations.flask_client import OAuth
+
+from google.oauth2 import id_token
+
+
 import os
 import reddit
-
-import tensorflow as tf
+import requests
+#import tensorflow as tf
 import cv2
 import numpy as np
 
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
 app = Flask(__name__)
+app.secret_key= "0934gj3ng403nb"
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
 
+
+app.config['GOOGLE_CLIENT_ID'] = "685939880249-1qsaqotjhscu1b2ig7aipckma4b9vkou.apps.googleusercontent.com"
+app.config['GOOGLE_CLIENT_SECRET'] = "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"
+
+oauth = OAuth(app)
+google = oauth.register(
+    name = 'google',
+    client_id = app.config["GOOGLE_CLIENT_ID"],
+    client_secret = app.config["GOOGLE_CLIENT_SECRET"],
+    access_token_url = 'https://accounts.google.com/o/oauth2/token',
+    access_token_params = None,
+    authorize_url = 'https://accounts.google.com/o/oauth2/auth',
+    authorize_params = None,
+    api_base_url = 'https://www.googleapis.com/oauth2/v1/',
+    userinfo_endpoint = 'https://openidconnect.googleapis.com/v1/userinfo',  # This is only needed if using openId to fetch user info
+    client_kwargs = {'scope': 'openid email profile'},
+    jwks_uri = "https://www.googleapis.com/oauth2/v3/certs",
+)
 
 
 
@@ -63,22 +92,60 @@ class LoginForm(FlaskForm):
                              InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
 
     submit = SubmitField('Login')
+ 
+ 
+
+@app.route('/login/google')
+def google_login():
+    google = oauth.create_client('google')  # create the google oauth client
+    redirect_uri = url_for('google_authorize', _external=True)
+    return google.authorize_redirect(redirect_uri)    
+            
+            
+x = ""
+# Google authorize route
+@app.route('/login/google/authorize')
+def google_authorize():
+    google = oauth.create_client('google')
+    token = google.authorize_access_token()
+    resp = google.get('userinfo').json()
+    x = resp
+    print(f"\n{resp}\n")
+    return redirect(url_for('home4'))
+   
+   
     
+
+   
     
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    
     form = LoginForm(request.form)
-    #if form.validate_on_submit():
-    user = User.query.filter_by(username=form.username.data).first()
-    print(user)
-    print(form.username.data)
-    print(form.username)
-    print(form)
-    if user:
-        if bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user)
-            return redirect(url_for('home2'))
+    if request.method == 'POST':
+        session.pop('user', None)
+        print("hello")
+        user = User.query.filter_by(username=form.username.data).first()
+        print(request.form['password'])
+        print(user.password)
+        if request.form['password'] == user.password :
+            session['user'] = request.form['username']
+            print("hi")
+    
+            
+                #if form.validate_on_submit():
+           # user = User.query.filter_by(username=form.username.data).first()
+                
+            if user:
+                print("bye")
+                #if bcrypt.check_password_hash(user.password, form.password.data):
+                print("ok")
+                login_user(user)
+                return redirect(url_for('home3'))
+            
     return render_template('login.html', form=form)
+
+
 
 
 @ app.route('/register', methods=['GET', 'POST'])
@@ -86,7 +153,7 @@ def register():
     form = RegisterForm(request.form)
 
     #if form.validate_on_submit():
-    hashed_password = bcrypt.generate_password_hash(form.password.data)
+    hashed_password = (form.password.data)
     new_user = User(username=form.username.data, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
@@ -99,20 +166,40 @@ def register():
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
+    session.pop('user', None)
     logout_user()
     return redirect(url_for('login'))
 
 
-cnn = tf.keras.models.load_model('waste_classifier.h5')
+
+
+
+
 
 @app.route('/')
 def home():
     return render_template('register.html')
 
+@app.route('/home')
+def home3():
+   
+    return render_template('home.html', user=session['user'])
+    
+    return redirect(url_for('login'))
 
 @app.route('/home')
-def home2():
+def home4():
+   
     return render_template('home.html')
+    
+    return redirect(url_for('login'))
+
+
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
 
 
 @app.route('/videos')

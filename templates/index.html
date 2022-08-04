@@ -64,19 +64,21 @@
                 <div class="user_thumb">
                 <img src="images/page_photo.jpg" alt="" title="" />
                   <div class="user_details">
-                   <p>Welcome, <span>Nathalie</span></p>
+                   <p>
+                    <span class>Welcome, {{session["user"]}}</span>
+                   </p>
                   </div>  
                   <div class="user_avatar"><img src="images/avatar.jpg" alt="" title="" /></div>       
                 </div>
 				
                   <nav class="user-nav">
                     <ul>
-                      <li><a href="features.html" class="close-panel"><img src="images/icons/white/settings.png" alt="" title="" /><span>Account Settings</span></a></li>
+                      <li><a href="features.html" class="close-panel"><img src="images/icons/white/settings.png" alt="" title="" /><span>COCK</span></a></li>
                       <li><a href="features.html" class="close-panel"><img src="images/icons/white/briefcase.png" alt="" title="" /><span>My Account</span></a></li>
                       <li><a href="features.html" class="close-panel"><img src="images/icons/white/message.png" alt="" title="" /><span>Messages</span><strong>12</strong></a></li>
                       <li><a href="features.html" class="close-panel"><img src="images/icons/white/love.png" alt="" title="" /><span>Favorites</span><strong>5</strong></a></li>
                       
-                      <li><a href="{{url_for('logout')}}"><img src="images/icons/white/lock.png" alt="" title="" />Logout</a></li>
+                      <li><button onclick="window.location = 'http://127.0.0.1:5002' "type="submit">Logout</button></li>
                     
                     </ul>
                   </nav>
@@ -117,7 +119,7 @@
 		     <div class="slider_trans">
 			 <div class="slider-caption">
 			          <span class="subtitle" data-swiper-parallax="-60%">CREATIVE SOLUTION</span>
-				  <h2 data-swiper-parallax="-100%">FOR MOBILE PROJECTS</h2>
+				  <h2 data-swiper-parallax="-100%">COCK</h2>
 				  
 				  <p data-swiper-parallax="-30%">Design and create, and build the most wonderful place in the world. But it takes people to make the dream a reality.</p>
 			 </div>
