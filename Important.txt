@@ -21,3 +21,5 @@ pip install praw
 Database
 pip install flask-sqlalchemy
 
+Google
+pip install Authlib

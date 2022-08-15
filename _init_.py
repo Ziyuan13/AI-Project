@@ -1,6 +1,7 @@
+from cgitb import reset
 from mimetypes import init
 import pathlib
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, abort, g, jsonify 
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, abort, g, jsonify
 #from flask import Flask, jsonify, render_template, request, redirect, session, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
@@ -174,14 +175,15 @@ def logout():
     return redirect(url_for('login'))
 
 
-
-
-
-
-
 @app.route('/')
 def home():
-    return render_template('login.html')
+    return render_template('home.html')
+
+
+
+# @app.route('/')
+# def home():
+#     return render_template('login.html')
 
 @app.route('/home')
 def home3():
@@ -212,60 +214,60 @@ def blog():
     return render_template('blog.html', posts=my_ten_hot_list, subreddit='ALBA E-Waste')
 
 
-model = tf.keras.models.load_model('waste_classifier.h5')
-@app.route('/predictImage', methods=['GET','POST'])
+# model = tf.keras.models.load_model('waste_classifier.h5')
+model = tf.keras.models.load_model('ewaste_model.h5')
+
+@app.route('/predictImage', methods=['GET'])
 def predictImage():
-    if request.method == 'POST':
-        imagefile = request.files['imagefile']
-        image_path = "./prediction/" + imagefile.filename
-        imagefile.save(image_path)
-        print(image_path)
+    return render_template('prediction.html')
 
-        np.set_printoptions(suppress=True)
-        data = np.ndarray(shape=(1, 128, 128, 3), dtype=np.float32)
+@app.route('/predict', methods=['POST'])
+def predict():
 
-        image_filename = image_path
-        image = Image.open(image_filename)
-        size = (128, 128)
-        image = ImageOps.fit(image, size, Image.ANTIALIAS)
-        image_array = np.asarray(image)
-        
-        normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
-        data[0] = normalized_image_array
-        prediction = model.predict(data)
-        target = ["batteries", "clothes", "e-waste", "glass", "light bulbs", "metal", "organic", "paper", "plastic"]
-        i = 0
+    #load Image to be predicted
+    imagefile = request.files['imagefile']
+    image_path = "./prediction/" + imagefile.filename
+    imagefile.save(image_path)
+    print(image_path)
+
+    # Disable scientific notation for clarity
+    np.set_printoptions(suppress=True)
+
+    # Create the array of the right shape to feed into the keras model
+    # The 'length' or number of images you can put into the array is determined by the first position in the shape tuple, in this case 1.
+    data = np.ndarray(shape=(1, 256, 256, 3), dtype=np.float32)
+
+    # path to your image
+    image_filename = image_path
+    image = Image.open(image_filename)
+
+    # resize the image to a 256x256 with the same strategy as in TM2:
+    # resizing the image to be at least 256x256 and then cropping from the center
+    size = (256, 256)
+    image = ImageOps.fit(image, size, Image.ANTIALIAS)
+
+    # turn the image into a numpy array
+    image_array = np.asarray(image)
+
+    # Load the image into the array
+    data[0] = image_array
+
+    # run the inference
+    prediction = model.predict(data)
+    print(prediction[0])
+    print(max(prediction[0]))
+    target = ["Aircon", "Hairdryer", "Network Hub", "Television", "Washing Machine"]
+    i = 0
+    if max(prediction[0]) > 0.6:
         for pos in prediction[0]:
             if max(prediction[0]) == pos:
                 result = target[i]
                 break
             else:
                 i += 1
-        return render_template('prediction.html', prediction=result)
     else:
-        return render_template('prediction.html')
-
-# @app.route('/predictImage', methods=['POST'])
-# def predictImage():
-#     # Load image from file
-#     filestream = request.files['file'].read()
-#     imgbytes = np.fromstring(filestream, np.unit8)
-#     img = cv2.imdecode(imgbytes, cv2.IMREAD_COLOR)
-
-#     # Preprocess the image
-#     img = cv2.resize(img, (128, 128))
-#     img = tf.keras.applications.vgg16.preprocess_input(img)
-#     img = img.reshape(1, 128, 128, 3)
-
-#     # Predict and return result
-#     prediction = model.predict(img)
-#     result = tf.keras.applications.vgg16.decode_predictions(prediction, top=3)
-        
-#     return jsonify({"result": [
-#         {"name": result[0][0][1], "score" : float(result[0][0][2])},
-#         {"name": result[0][1][1], "score": float(result[0][1][2])},
-#         {"name": result[0][2][1], "score" : float(result[0][2][2])}
-#     ]})
+        result = 'Not Regulated'
+    return render_template('prediction.html', prediction=result)
 
 if __name__ == '__main__':
     app.run(port="5002", debug=False)

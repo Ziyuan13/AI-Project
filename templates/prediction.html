@@ -50,12 +50,8 @@
 
   #custom{
     display: block;
-    width: 45%;
-    height: 45px;
-    margin-left: 25%;
     line-height: 50px;
     text-align: center;
-
     font-size: 15px;
     font-family: "Open Sans", sans-serif;
     text-transform: Uppercase;
@@ -91,7 +87,7 @@
       
       <div class="center">
         <div class="form-input">
-          <form method="POST" action="predictImage" , enctype="multipart/form-data">
+          <form method="POST" action="predict" , enctype="multipart/form-data" style="margin-left:15px;">
             <div class="preview">
               <img id="file-ip-1-preview">
             </div>
@@ -104,7 +100,7 @@
           <br>
           {% if prediction %}
           <div>
-            <h2 id="custom">Image is a {{prediction}}</h2>
+            <h3 id="custom">Image is {{prediction}}</h3>
           </div>
           {% endif %}
         </div>
