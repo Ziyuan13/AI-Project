@@ -219,7 +219,7 @@ model = tf.keras.models.load_model('ewaste_model.h5')
 
 @app.route('/predictImage', methods=['GET'])
 def predictImage():
-    return render_template('test.html')
+    return render_template('prediction.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -271,7 +271,7 @@ def predict():
         regulated = "False"
         result = ''
         
-    return render_template('test.html', regulated=regulated, prediction=result)
+    return render_template('prediction.html', regulated=regulated, prediction=result)
 
 if __name__ == '__main__':
     app.run(port="5002", debug=True)
