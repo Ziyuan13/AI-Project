@@ -219,7 +219,7 @@ model = tf.keras.models.load_model('ewaste_model.h5')
 
 @app.route('/predictImage', methods=['GET'])
 def predictImage():
-    return render_template('prediction.html')
+    return render_template('test.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -258,16 +258,20 @@ def predict():
     print(max(prediction[0]))
     target = ["Aircon", "Hairdryer", "Network Hub", "Television", "Washing Machine"]
     i = 0
-    if max(prediction[0]) > 0.6:
+    if max(prediction[0]) > 0.8:
         for pos in prediction[0]:
             if max(prediction[0]) == pos:
+                regulated = "True"
                 result = target[i]
+                print(result)
                 break
             else:
                 i += 1
     else:
-        result = 'Not Regulated'
-    return render_template('prediction.html', prediction=result)
+        regulated = "False"
+        result = ''
+        
+    return render_template('test.html', regulated=regulated, prediction=result)
 
 if __name__ == '__main__':
-    app.run(port="5002", debug=False)
+    app.run(port="5002", debug=True)

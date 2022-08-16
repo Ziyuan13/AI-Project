@@ -50,14 +50,18 @@
 
   #custom{
     display: block;
-    line-height: 50px;
+    line-height: 40px;
     text-align: center;
-    font-size: 15px;
+    font-size: 20px;
     font-family: "Open Sans", sans-serif;
-    text-transform: Uppercase;
-    font-weight: 600;
+    font-weight: 400;
     border-radius: 5px;
     cursor: pointer;
+  }
+
+  #result{
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   .form-input img {
@@ -66,6 +70,10 @@
 
     margin-bottom: 30px;
   }
+
+  table,td {
+    border: 1px solid #333;
+  }
 </style>
 <div class="pages">
   <div data-page="form" class="page no-toolbar no-navbar">
@@ -73,7 +81,7 @@
 
       <div class="navbarpages navbarpagesbg">
         <div class="navbar_left">
-          <div class="logo_text"><a href="index.html">ALBA</a></div>
+          <div class="logo_text"><a href="/home">ALBA</a></div>
         </div>
         <div class="navbar_right navbar_right_menu">
           <a href="#" data-panel="left" class="open-panel"><img
@@ -84,26 +92,44 @@
               src="{{ url_for('static',filename='images/icons/white/user.png') }}" alt="" title="" /></a>
         </div>
       </div>
-      
-      <div class="center">
-        <div class="form-input">
-          <form method="POST" action="predict" , enctype="multipart/form-data" style="margin-left:15px;">
-            <div class="preview">
-              <img id="file-ip-1-preview">
-            </div>
-            <label for="file-ip-1">Upload Image</label>
-            <input type="file" name="imagefile" id="file-ip-1" onchange="showPreview(event);"/>
-            <br>
-            <label for="file-ip-2">Submit</label>
-            <input type="submit" id="file-ip-2">
-          </form>
-          <br>
-          {% if prediction %}
-          <div>
-            <h3 id="custom">Image is {{prediction}}</h3>
+
+      <div class="swiper-container slidertoolbar swiper-init" data-effect="slide" data-parallax="true"
+        data-pagination=".swiper-pagination" data-next-button=".swiper-button-next" data-prev-button=".swiper-button-prev">
+
+          <div class="center">
+            <table>
+              <tr>
+                <td>
+                  <div class="form-input">
+                    <form method="POST" action="predict" , enctype="multipart/form-data" style="margin-left:15px;">
+                      <div class="preview">
+                        <img id="file-ip-1-preview">
+                      </div>
+                      <label for="file-ip-1">Upload Image</label>
+                      <input type="file" name="imagefile" id="file-ip-1" onchange="showPreview(event);" />
+                      <br>
+                      <label for="file-ip-2">Submit</label>
+                      <input type="submit" id="file-ip-2">
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  {% if "True" in regulated %}
+                  <div id="result">
+                    <h3 id="custom"><span style="color: #3CCF4E;">Regulated</span> E-Waste</h3>
+                    <h3 id="custom">Image: {{prediction}}</h3>
+                  </div>
+                  {% elif "False" in regulated %}
+                  <div>
+                    <h3 id="custom"><span style="color: red;">Non-Regulated</span> E-Waste</h3>
+                  </div>
+                  {% endif %}
+                </td>
+              </tr>
+            </table>
           </div>
-          {% endif %}
-        </div>
       </div>
     </div>
   </div>
