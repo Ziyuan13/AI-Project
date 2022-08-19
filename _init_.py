@@ -217,7 +217,7 @@ def blog():
 model1 = tf.keras.models.load_model('ewaste_model.h5')
 
 # patrick model
-model2 = tf.keras.models.load_model('mymodel.h5')
+model2 = tf.keras.models.load_model('mymodel.hdf5')
 
 @app.route('/predictImage', methods=['GET'])
 def predictImage():
@@ -273,7 +273,7 @@ def predict():
     if max(prediction1[0]) > max(prediction2[0]):
         print(max(prediction1[0]))
         pred_thres = max(prediction1[0])
-        if pred_thres > 0.9:
+        if pred_thres > 0.85:
             for pos in prediction1[0]:
                 if pred_thres == pos:
                     regulated = "True"
@@ -281,6 +281,7 @@ def predict():
                     print(result)
                     getpoints = object_dict[result]
 
+                    user_points = user.get('points')
                     if user_points == None:
                         user_points = getpoints
                         user.update({"points": user_points})
@@ -300,13 +301,15 @@ def predict():
     elif max(prediction1[0]) < max(prediction2[0]):
         print(max(prediction2[0]))
         pred_thres = max(prediction2[0])
-        if pred_thres > 0.9:
+        if pred_thres > 0.85:
             for pos in prediction1[0]:
                 if pred_thres == pos:
                     regulated = "True"
                     result = target2[i]
                     print(result)
                     getpoints = object_dict[result]
+
+                    user_points = user.get('points')
                     if user_points == None:
                         user_points = getpoints
                         user.update({"points": user_points})
