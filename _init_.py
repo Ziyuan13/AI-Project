@@ -217,7 +217,7 @@ def blog():
 model1 = tf.keras.models.load_model('ewaste_model.h5')
 
 # patrick model
-model2 = tf.keras.models.load_model('mymodel.hdf5')
+model2 = tf.keras.models.load_model('mymodel.h5')
 
 @app.route('/predictImage', methods=['GET'])
 def predictImage():
