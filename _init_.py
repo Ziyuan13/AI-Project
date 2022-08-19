@@ -185,12 +185,12 @@ def home():
 # def home():
 #     return render_template('login.html')
 
-@app.route('/home')
-def home3():
+# @app.route('/home')
+# def home3():
    
-    return render_template('home.html', user=session['user'])
+#     return render_template('home.html', user=session['user'])
     
-    return redirect(url_for('login'))
+#     return redirect(url_for('login'))
 
 @app.route('/home')
 def home4():
@@ -213,14 +213,18 @@ def blog():
     my_ten_hot_list = reddit.ten_top_titles(my_reddit_instance, 'ALBA_Ewaste')
     return render_template('blog.html', posts=my_ten_hot_list, subreddit='ALBA E-Waste')
 
+# ziyuan model
+model1 = tf.keras.models.load_model('ewaste_model.h5')
 
-# model = tf.keras.models.load_model('waste_classifier.h5')
-model = tf.keras.models.load_model('ewaste_model.h5')
+# patrick model
+model2 = tf.keras.models.load_model('mymodel.hdf5')
 
 @app.route('/predictImage', methods=['GET'])
 def predictImage():
     return render_template('prediction.html')
 
+
+user = {'point': 0}
 @app.route('/predict', methods=['POST'])
 def predict():
 
@@ -253,25 +257,72 @@ def predict():
     data[0] = image_array
 
     # run the inference
-    prediction = model.predict(data)
-    print(prediction[0])
-    print(max(prediction[0]))
-    target = ["Aircon", "Hairdryer", "Network Hub", "Television", "Washing Machine"]
+    prediction1 = model1.predict(data)
+    prediction2 = model2.predict(data)
+
+    # points system
+    target1 = ["Aircon", "Hairdryer", "Network Hub",
+              "Television", "Washing Machine"]
+    target2 = ["Battery", "Light Bulb", "PC Monitor",
+               "Personal Mobility Device"]
+    object_dict = {"Aircon": 400, "Hairdryer": 100,
+                   "Network Hub": 150, "Television": 300, "Washing Machine": 500, "Battery": 25, "Light Bulb": 50, "PC Monitor": 125,
+                   "Personal Mobility Device": 250}
+    
     i = 0
-    if max(prediction[0]) > 0.8:
-        for pos in prediction[0]:
-            if max(prediction[0]) == pos:
-                regulated = "True"
-                result = target[i]
-                print(result)
-                break
-            else:
-                i += 1
-    else:
-        regulated = "False"
-        result = ''
+    if max(prediction1[0]) > max(prediction2[0]):
+        print(max(prediction1[0]))
+        pred_thres = max(prediction1[0])
+        if pred_thres > 0.9:
+            for pos in prediction1[0]:
+                if pred_thres == pos:
+                    regulated = "True"
+                    result = target1[i]
+                    print(result)
+                    getpoints = object_dict[result]
+
+                    if user_points == None:
+                        user_points = getpoints
+                        user.update({"points": user_points})
+                    else:
+                        user_points = user.get('points') + getpoints
+                        user.update({"points": user_points})
+                    break
+                else:
+                    i += 1
+        else:
+            regulated = "False"
+            result = ''
+            getpoints = 0
+            user_points = user.get('points')
+
+
+    elif max(prediction1[0]) < max(prediction2[0]):
+        print(max(prediction2[0]))
+        pred_thres = max(prediction2[0])
+        if pred_thres > 0.9:
+            for pos in prediction1[0]:
+                if pred_thres == pos:
+                    regulated = "True"
+                    result = target2[i]
+                    print(result)
+                    getpoints = object_dict[result]
+                    if user_points == None:
+                        user_points = getpoints
+                        user.update({"points": user_points})
+                    else:
+                        user_points = user.get('points') + getpoints
+                        user.update({"points": user_points})
+                    break
+                else:
+                    i += 1
+        else:
+            regulated = "False"
+            result = ''
+            getpoints = 0
+            user_points = user.get('points')
         
-    return render_template('prediction.html', regulated=regulated, prediction=result)
+    return render_template('prediction.html', regulated=regulated, prediction=result, given=getpoints, points=user_points)
 
 if __name__ == '__main__':
     app.run(port="5002", debug=True)
